@@ -22,7 +22,7 @@ object LogProducer extends App{
   val requests = (0 to clc.records).map("Req-" + _)
 
   val rnd = new Random()
-  /*
+
   val topic = clc.kafkaTopic
   val props = new Properties()
 
@@ -33,14 +33,14 @@ object LogProducer extends App{
   props.put(ProducerConfig.CLIENT_ID_CONFIG, kc.clientIdPrefix + "-Clickstream")
 
   val kafkaProducer: Producer[Nothing, String] = new KafkaProducer[Nothing, String](props)
-  println(kafkaProducer.partitionsFor(topic))*/
+  println(kafkaProducer.partitionsFor(topic))
 
   val filePath = clc.filePath
   val destPath = clc.destPath
 
   for (fileCount <- 1 to clc.numberOfFiles) {
-
-    val fw = new FileWriter(filePath, true)
+    //Uncomment This Section to write clickstream logs in files
+    //val fw = new FileWriter(filePath, true)
 
     // introduce some randomness to time increments
     val incrementTimeEvery = rnd.nextInt(clc.records - 1) + 1
@@ -55,9 +55,11 @@ object LogProducer extends App{
       val requestId = requests(rnd.nextInt(requests.length - 1))
 
       val line = s"$requestId\t$adjustedTimestamp\n"
-      //val producerRecord = new ProducerRecord(topic, line)
-      //kafkaProducer.send(producerRecord)
-      fw.write(line)
+      val producerRecord = new ProducerRecord(topic, line)
+      kafkaProducer.send(producerRecord)
+
+      //Uncomment This Section to write clickstream logs in files
+      //fw.write(line)
 
       if (iteration % incrementTimeEvery == 0) {
         println(s"Sent $iteration messages!")
@@ -68,14 +70,15 @@ object LogProducer extends App{
 
     }
 
-
+    //Uncomment This Section to write clickstream logs in files
+    /*
     fw.close()
 
     val outputFile = FileUtils.getFile(s"${destPath}data_$timestamp")
     println(s"Moving produced data to $outputFile")
     FileUtils.moveFile(FileUtils.getFile(filePath), outputFile)
-
-    val sleeping = 5000
+    */
+    val sleeping = 2000
     println(s"Sleeping for $sleeping ms")
 
   }
