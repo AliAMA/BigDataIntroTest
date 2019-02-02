@@ -33,4 +33,14 @@ object Settings {
     lazy val hdfsPath = impressionLogGenConf.getString("hdfs_path")
   }
 
+  object KafkaConf {
+    private val kafkaConf = config.getConfig("kafka")
+
+    lazy val bootstrapServers = kafkaConf.getString("bootstrap_servers")
+    lazy val keySerializer = kafkaConf.getString("key_serializer")
+    lazy val valueSerializer = kafkaConf.getString("value_serializer")
+    lazy val acks = kafkaConf.getString("acks")
+    lazy val clientIdPrefix = kafkaConf.getString("client_id")
+  }
+
 }
