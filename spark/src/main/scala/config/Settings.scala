@@ -25,7 +25,10 @@ object Settings {
 
     lazy val records = impressionLogGenConf.getInt("records")
     lazy val timeMultiplier = impressionLogGenConf.getInt("time_multiplier")
+    lazy val applicationNameFile = impressionLogGenConf.getString("application_name_file_name")
     lazy val apps = impressionLogGenConf.getInt("apps")
+    lazy val ads = impressionLogGenConf.getInt("ads")
+    lazy val adsTitleFile = impressionLogGenConf.getString("ad_file_name")
     lazy val filePath = impressionLogGenConf.getString("file_path")
     lazy val destPath = impressionLogGenConf.getString("dest_path")
     lazy val numberOfFiles = impressionLogGenConf.getInt("number_of_files")

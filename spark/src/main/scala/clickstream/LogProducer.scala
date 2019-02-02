@@ -14,7 +14,7 @@ import scala.util.Random
   * Created by Ali on 2/3/2019.
   */
 object LogProducer extends App{
-  //Get the config Clickstream Log Config
+  //Get the configs (Clickstream Log & Kafka Config)
   val clc = Settings.ClickLogGenConf
   val kc = Settings.KafkaConf
 
@@ -30,7 +30,7 @@ object LogProducer extends App{
   props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kc.keySerializer)
   props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kc.valueSerializer)
   props.put(ProducerConfig.ACKS_CONFIG, kc.acks)
-  props.put(ProducerConfig.CLIENT_ID_CONFIG, kc.clientIdPrefix + "-Clickstream")
+  props.put(ProducerConfig.CLIENT_ID_CONFIG, kc.clientIdPrefix + "-ClickEvents")
 
   val kafkaProducer: Producer[Nothing, String] = new KafkaProducer[Nothing, String](props)
   println(kafkaProducer.partitionsFor(topic))
