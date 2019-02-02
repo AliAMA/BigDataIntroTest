@@ -8,8 +8,9 @@
     <artifactId>interview</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
-        <module>logproducer</module>
+        <module>spark</module>
     </modules>
 
     <properties>
@@ -145,6 +146,7 @@
             <version>1.7</version>
         </dependency>
     </dependencies>
+
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <plugins>
