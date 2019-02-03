@@ -2,6 +2,7 @@ package streaming
 
 import _root_.kafka.serializer.StringDecoder
 import com.datastax.spark.connector._
+import config.Settings
 import domain.{ClickEvent, ImpressionEvent}
 import org.apache.spark.SparkContext
 import org.apache.spark.storage.StorageLevel
@@ -14,6 +15,8 @@ import utils.SparkUtils._
   */
 object ImpressionStreamingJob {
   def main(args: Array[String]): Unit = {
+    //Getting impression streaming config
+    val isc = Settings.ImpressionStreamingJobConf
     // setup spark context
     val sc = getSparkContext("Streaming with Spark")
     val sqlContext = getSQLContext(sc)
@@ -24,12 +27,12 @@ object ImpressionStreamingJob {
       val ssc = new StreamingContext(sc, batchDuration)
 
       val kafkaParams = Map(
-        "zookeeper.connect" -> "localhost:2181",
-        "group.id" -> "lambda",
-        "auto.offset.reset" -> "largest")
+        "zookeeper.connect" -> isc.zookeeper,
+        "group.id" -> isc.groupId,
+        "auto.offset.reset" -> isc.autoOffsetReset)
 
       val kstream = KafkaUtils.createStream[String, String, StringDecoder, StringDecoder](
-        ssc, kafkaParams, Map("app-impressions" -> 1), StorageLevel.MEMORY_AND_DISK)
+        ssc, kafkaParams, Map(isc.kafkaTopic -> 1), StorageLevel.MEMORY_AND_DISK)
         .map(_._2)
 
       val stream = kstream.transform { input =>
@@ -53,7 +56,7 @@ object ImpressionStreamingJob {
 
       stream.foreachRDD(rdd => {
         rdd
-          .saveToCassandra("tapsell", "impressions")
+          .saveToCassandra(isc.keyspace, isc.table)
       })
 
       ssc

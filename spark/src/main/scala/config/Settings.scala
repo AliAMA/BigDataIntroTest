@@ -46,4 +46,26 @@ object Settings {
     lazy val clientIdPrefix = kafkaConf.getString("client_id")
   }
 
+  object ClickStreamingJobConf extends Serializable {
+    private val clickStreamingJobConf = config.getConfig("click_streaming_job")
+
+    lazy val zookeeper = clickStreamingJobConf.getString("zookeeper")
+    lazy val groupId = clickStreamingJobConf.getString("group_id")
+    lazy val autoOffsetReset = clickStreamingJobConf.getString("auto_offset_reset")
+    lazy val kafkaTopic = clickStreamingJobConf.getString("kafka_topic")
+    lazy val keyspace = clickStreamingJobConf.getString("keyspace")
+    lazy val table = clickStreamingJobConf.getString("table")
+  }
+
+  object ImpressionStreamingJobConf extends Serializable {
+    private val impressionStreamingJobConf = config.getConfig("impression_streaming_job")
+
+    lazy val zookeeper = impressionStreamingJobConf.getString("zookeeper")
+    lazy val groupId = impressionStreamingJobConf.getString("group_id")
+    lazy val autoOffsetReset = impressionStreamingJobConf.getString("auto_offset_reset")
+    lazy val kafkaTopic = impressionStreamingJobConf.getString("kafka_topic")
+    lazy val keyspace = impressionStreamingJobConf.getString("keyspace")
+    lazy val table = impressionStreamingJobConf.getString("table")
+  }
+
 }
