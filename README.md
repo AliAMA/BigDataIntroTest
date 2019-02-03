@@ -18,8 +18,8 @@ You Can Find The Requested Report [Here](https://github.com/AliAMA/BigDataIntroT
         ├── scala                                   # Source Root Dir
         │   ├── clickstream                         # Log Producer App for Click Events
         │   ├── config                              # Module Config Objects (config is written in HOCON format) 
-        │   └── domain                              # Domain Objects
-        │   └── impressionstream                    # Log Producer App for Impression Events
-        │   └── streaming                           # Spark Jobs for Recieving from Kafka & Persist in Cassandra
+        │   ├── domain                              # Domain Objects
+        │   ├── impressionstream                    # Log Producer App for Impression Events
+        │   ├── streaming                           # Spark Jobs for Recieving from Kafka & Persist in Cassandra
         │   └── utils                               # Utilities (functions for creating spark context, ...) 
         └── ...
