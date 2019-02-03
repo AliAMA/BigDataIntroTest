@@ -2,7 +2,7 @@ package streaming
 
 import _root_.kafka.serializer.StringDecoder
 import com.datastax.spark.connector._
-import domain.ClickEvent
+import domain.{ClickEvent, ImpressionEvent}
 import org.apache.spark.SparkContext
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -29,19 +29,17 @@ object ImpressionStreamingJob {
         "auto.offset.reset" -> "largest")
 
       val kstream = KafkaUtils.createStream[String, String, StringDecoder, StringDecoder](
-        ssc, kafkaParams, Map("web-clicks" -> 1), StorageLevel.MEMORY_AND_DISK)
+        ssc, kafkaParams, Map("app-impressions" -> 1), StorageLevel.MEMORY_AND_DISK)
         .map(_._2)
 
       val stream = kstream.transform { input =>
         val inputRDD = input.flatMap { line =>
           val record = line.replace("\n", "").split("\\t")
           println("@254: " + line)
-          println("@254: " + record.length)
-          println("@254: " + record(0))
-          println("@254: " + record(1))
-          if (record.length == 2)
+          if (record.length == 7)
           // make sure we have complete records
-            Some(ClickEvent(record(0), record(1).toLong))
+            Some(ImpressionEvent(record(0), record(1), record(2), record(3).toDouble, record(4), record(5)
+              , record(6).toLong))
           else
             None
         }
@@ -55,8 +53,7 @@ object ImpressionStreamingJob {
 
       stream.foreachRDD(rdd => {
         rdd
-          .map(r => ClickEvent(r.requestId, r.clickTime))
-          .saveToCassandra("tapsell", "clicks")
+          .saveToCassandra("tapsell", "impressions")
       })
 
       ssc

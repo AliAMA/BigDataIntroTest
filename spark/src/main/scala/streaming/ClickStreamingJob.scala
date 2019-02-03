@@ -32,19 +32,6 @@ object ClickStreamingJob {
 
     val batchSeconds = 4
 
-    /*
-    def streamingApp(sc: SparkContext, batchDuration: Duration) = {
-      val ssc = new StreamingContext(sc, batchDuration)
-
-      ssc
-    }
-
-    val ssc = getStreamingContext(streamingApp, sc, batchDuration)
-
-    //ssc.remember(Minutes(5))
-    ssc.start()
-    //ssc.awaitTermination()
-    */
     def streamingApp(sc: SparkContext, batchDuration: Duration) = {
       val ssc = new StreamingContext(sc, batchDuration)
 
@@ -74,13 +61,14 @@ object ClickStreamingJob {
         //val df = inputRDD.toDF()
         //df.registerTempTable("clicks")
         //sqlContext.cacheTable("clicks")
+        //Ready To Query Against Cached Temp Table
 
         inputRDD
       }.cache()
 
       stream.foreachRDD(rdd => {
         rdd
-          .map(r => ClickEvent(r.requestId, r.clickTime))
+          //.map(r => ClickEvent(r.requestId, r.clickTime))
           .saveToCassandra("tapsell", "clicks")
       })
 
