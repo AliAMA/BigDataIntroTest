@@ -16,4 +16,10 @@ package object domain {
                         clickTime: Long
                        )
 
+  case class Click(timestamp_hour: Long,
+                   requestId: String,
+                   clickTime: Long,
+                   inputProps: Map[String, String] = Map()
+                  )
+
 }

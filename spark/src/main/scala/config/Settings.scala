@@ -55,6 +55,8 @@ object Settings {
     lazy val kafkaTopic = clickStreamingJobConf.getString("kafka_topic")
     lazy val keyspace = clickStreamingJobConf.getString("keyspace")
     lazy val table = clickStreamingJobConf.getString("table")
+    lazy val hdfsPath = clickStreamingJobConf.getString("hdfs_path")
+    lazy val metadataBrokerList = clickStreamingJobConf.getString("metadata_broker_list")
   }
 
   object ImpressionStreamingJobConf extends Serializable {
@@ -66,6 +68,8 @@ object Settings {
     lazy val kafkaTopic = impressionStreamingJobConf.getString("kafka_topic")
     lazy val keyspace = impressionStreamingJobConf.getString("keyspace")
     lazy val table = impressionStreamingJobConf.getString("table")
+    lazy val hdfsPath = impressionStreamingJobConf.getString("hdfs_path")
+    lazy val metadataBrokerList = impressionStreamingJobConf.getString("metadata_broker_list")
   }
 
 }
